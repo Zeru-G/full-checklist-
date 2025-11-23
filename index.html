@@ -182,7 +182,7 @@
         </div>
     </div>
 
-    <!-- Journal Modal & Overlay -->
+        <!-- Journal Modal & Overlay -->
     <div id="journalOverlay" class="journal-overlay"></div>
     <div id="journalModal" class="journal-modal">
         <div class="card journal-card">
@@ -197,15 +197,14 @@
                     <label>Date</label>
                     <input type="date" id="tradeDate" class="journal-input">
                 </div>
-             <!-- In Edit Trade Modal -->
-<div class="form-group">
-    <label>Pair</label>
-    <div class="searchable-select">
-        <input type="text" id="editPairSearch" class="journal-input" placeholder="e.g. EURUSD, BTCUSD, XAUUSD">
-        <div id="editPairDropdown" class="select-dropdown"></div>
-        <input type="hidden" id="editPair" required>
-    </div>
-</div>
+                <div class="form-group">
+                    <label>Pair</label>
+                    <div class="searchable-select">
+                        <input type="text" id="tradePairSearch" class="journal-input" placeholder="e.g. EURUSD">
+                        <div id="tradePairDropdown" class="select-dropdown"></div>
+                        <input type="hidden" id="tradePair" required>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>Direction</label>
                     <select id="tradeDir" class="journal-input">
@@ -225,7 +224,7 @@
                     <label>Notes (optional)</label>
                     <textarea id="tradeNotes" class="journal-input" rows="2" placeholder="e.g. Ignored H4 trend"></textarea>
                 </div>
-                        <div class="form-group">
+                <div class="form-group">
                     <label>📷 Before Chart (Entry)</label>
                     <div class="image-dropzone" id="beforeDropzone">
                         <i class="fas fa-cloud-upload-alt"></i>
@@ -234,7 +233,6 @@
                     </div>
                     <div id="beforePreview" class="image-preview"></div>
                 </div>
-
                 <div class="form-group">
                     <label>📷 After Chart (Exit)</label>
                     <div class="image-dropzone" id="afterDropzone">
@@ -242,8 +240,8 @@
                         <p>Drag & drop or <strong>click to upload</strong></p>
                         <input type="file" id="imgAfter" accept="image/*" hidden>
                     </div>
-    <div id="afterPreview" class="image-preview"></div>
-</div>
+                    <div id="afterPreview" class="image-preview"></div>
+                </div>
                 <div class="form-group">
                     <label>🎯 Checklist Grade (Auto-filled)</label>
                     <input type="text" id="tradeGrade" class="journal-input" readonly>
@@ -251,6 +249,80 @@
                 <div class="form-actions">
                     <button class="fab-btn" id="saveTradeBtn">
                         <i class="fas fa-save"></i> Save Trade
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Trade Modal -->
+    <div id="editOverlay" class="journal-overlay"></div>
+    <div id="editModal" class="journal-modal">
+        <div class="card journal-card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-edit"></i> Edit Trade</div>
+                <button class="fab-btn modal-close" id="closeEditModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="journal-form">
+                <input type="hidden" id="editTradeId">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="editDate" class="journal-input">
+                </div>
+                <div class="form-group">
+                    <label>Pair</label>
+                    <div class="searchable-select">
+                        <input type="text" id="editPairSearch" class="journal-input" placeholder="e.g. EURUSD">
+                        <div id="editPairDropdown" class="select-dropdown"></div>
+                        <input type="hidden" id="editPair" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Direction</label>
+                    <select id="editDir" class="journal-input">
+                        <option>Long</option>
+                        <option>Short</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Outcome</label>
+                    <select id="editOutcome" class="journal-input">
+                        <option>Win</option>
+                        <option>Loss</option>
+                        <option>Break-even</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Grade</label>
+                    <input type="text" id="editGrade" class="journal-input" maxlength="3">
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="editNotes" class="journal-input" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>📷 Before Chart (Entry)</label>
+                    <div class="image-dropzone" id="editBeforeDropzone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop or <strong>click to upload</strong></p>
+                        <input type="file" id="editImgBefore" accept="image/*" hidden>
+                    </div>
+                    <div id="editBeforePreview" class="image-preview"></div>
+                </div>
+                <div class="form-group">
+                    <label>📷 After Chart (Exit)</label>
+                    <div class="image-dropzone" id="editAfterDropzone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop or <strong>click to upload</strong></p>
+                        <input type="file" id="editImgAfter" accept="image/*" hidden>
+                    </div>
+                    <div id="editAfterPreview" class="image-preview"></div>
+                </div>
+                <div class="form-actions">
+                    <button class="fab-btn" id="updateTradeBtn" style="background:var(--accent);">
+                        <i class="fas fa-check"></i> Update Trade
                     </button>
                 </div>
             </div>
@@ -306,83 +378,6 @@
             </div>
         </div>
     </div>
-<!-- ===== Edit Trade Modal ===== -->
-<div id="editOverlay" class="journal-overlay"></div>
-<div id="editModal" class="journal-modal">
-    <div class="card journal-card">
-        <div class="card-header">
-            <div class="card-title"><i class="fas fa-edit"></i> Edit Trade</div>
-            <button class="fab-btn modal-close" id="closeEditModal">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="journal-form">
-            <input type="hidden" id="editTradeId">
-            <div class="form-group">
-                <label>Date</label>
-                <input type="date" id="editDate" class="journal-input">
-            </div>
-          <!-- In Log Trade Modal -->
-<div class="form-group">
-    <label>Pair</label>
-    <div class="searchable-select">
-        <input type="text" id="tradePairSearch" class="journal-input" placeholder="e.g. EURUSD, BTCUSD, XAUUSD">
-        <div id="tradePairDropdown" class="select-dropdown"></div>
-        <input type="hidden" id="tradePair" required>
-    </div>
-</div>
-            <div class="form-group">
-                <label>Direction</label>
-                <select id="editDir" class="journal-input">
-                    <option>Long</option>
-                    <option>Short</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Outcome</label>
-                <select id="editOutcome" class="journal-input">
-                    <option>Win</option>
-                    <option>Loss</option>
-                    <option>Break-even</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Grade</label>
-                <input type="text" id="editGrade" class="journal-input" maxlength="3">
-            </div>
-            <div class="form-group">
-                <label>Notes</label>
-                <textarea id="editNotes" class="journal-input" rows="2"></textarea>
-            </div>
-    
-                        <!-- In Edit Modal -->
-                <div class="form-group">
-                    <label>📷 Before Chart (Entry)</label>
-                    <div class="image-dropzone" id="editBeforeDropzone">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Drag & drop or <strong>click to upload</strong></p>
-                        <input type="file" id="editImgBefore" accept="image/*" hidden>
-                    </div>
-                    <div id="editBeforePreview" class="image-preview"></div> <!-- ✅ Unique ID -->
-                </div>
-
-                <div class="form-group">
-                    <label>📷 After Chart (Exit)</label>
-                    <div class="image-dropzone" id="editAfterDropzone">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Drag & drop or <strong>click to upload</strong></p>
-                        <input type="file" id="editImgAfter" accept="image/*" hidden>
-                    </div>
-                    <div id="editAfterPreview" class="image-preview"></div> <!-- ✅ Unique ID -->
-                </div>
-                <div class="form-actions">
-                <button class="fab-btn" id="updateTradeBtn" style="background:var(--accent);">
-                    <i class="fas fa-check"></i> Update Trade
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
     <script src="Set.js"></script>
 </body>
