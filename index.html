@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Zeru_G Trading Checklist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="Set.css" />
+</head>
+<body class="dark-theme">
+    <div class="container">
+        <div class="fixed-actions">
+            <button class="fab-btn" id="resetBtn" title="Reset All">
+                <i class="fas fa-redo"></i>
+            </button>
+            <button class="fab-btn" id="logTradeBtn" title="Log Trade with Journal">
+                <i class="fas fa-book"></i>
+            </button>
+            <button class="fab-btn" id="viewJournalBtn" title="View Trade Journal">
+                <i class="fas fa-book-open"></i>
+            </button>
+            <button class="fab-btn theme-toggle" id="themeToggle" title="Toggle Theme">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+
+        <header>
+            <h1>Zeru_G Check List</h1>
+            <div class="subtitle">CONFLUENCES</div>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-list-check"></i> Trading Inputs
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th>TRADING INPUTS</th>
+                            <th>Weekly</th>
+                            <th>Daily</th>
+                            <th>4H</th>
+                            <th>1H</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="input-label">TREND</td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="weekly"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="daily"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="4hour"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="5" data-timeframe="1hour"><span class="checkbox-custom"></span></label></td>
+                        </tr>
+                        <tr>
+                            <td class="input-label">At AOI/Rejected</td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="weekly"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="daily"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="5" data-timeframe="4hour"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="5" data-timeframe="1hour"><span class="checkbox-custom"></span></label></td>
+                        </tr>
+                        <tr>
+                            <td class="input-label">Rejection from previous structure point</td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="weekly"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="daily"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="5" data-timeframe="4hour"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="0" data-timeframe="1hour"><span class="checkbox-custom"></span></label></td>
+                        </tr>
+                        <tr>
+                            <td class="input-label">Candle stick rejection from AOI</td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="weekly"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="daily"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="4hour"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="1hour"><span class="checkbox-custom"></span></label></td>
+                        </tr>
+                        <tr>
+                            <td class="input-label">Rejection /Touching EMA</td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="5" data-timeframe="weekly"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="5" data-timeframe="daily"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="5" data-timeframe="4hour"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="0" data-timeframe="1hour"><span class="checkbox-custom"></span></label></td>
+                        </tr>
+                        <tr>
+                            <td class="input-label">Round psychological Level</td>
+                            <td colspan="4" class="centered-checkbox-cell">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" data-value="5" data-timeframe="entry">
+                                    <span class="checkbox-custom"></span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="input-label">Pattern</td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="weekly"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="daily"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="10" data-timeframe="4hour"><span class="checkbox-custom"></span></label></td>
+                            <td><label class="checkbox-wrapper"><input type="checkbox" data-value="0" data-timeframe="1hour"><span class="checkbox-custom"></span></label></td>
+                        </tr>
+                        <tr class="must-have">
+                            <td class="input-label">SOS</td>
+                            <td colspan="4" style="padding: 12px 0; text-align: center;">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" data-value="10" data-timeframe="entry">
+                                    <span class="checkbox-custom"></span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr class="must-have">
+                            <td class="input-label">ENTRY SIGNAL</td>
+                            <td colspan="4" style="padding: 12px 0; text-align: center;">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" data-value="10" data-timeframe="entry">
+                                    <span class="checkbox-custom"></span>
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-calculator"></i> Scoring
+                </div>
+            </div>
+            <div class="totals-bar">
+                <div class="total-box">
+                    <div class="total-label">WEEKLY</div>
+                    <div class="total-value" id="total-weekly">0%</div>
+                </div>
+                <div class="total-box">
+                    <div class="total-label">DAILY</div>
+                    <div class="total-value" id="total-daily">0%</div>
+                </div>
+                <div class="total-box">
+                    <div class="total-label">4H</div>
+                    <div class="total-value" id="total-4hour">0%</div>
+                </div>
+                <div class="total-box">
+                    <div class="total-label">1H</div>
+                    <div class="total-value" id="total-1hour">0%</div>
+                </div>
+                <div class="total-box">
+                    <div class="total-label">ENTRY</div>
+                    <div class="total-value" id="entry-signal">0%</div>
+                </div>
+                <div class="total-box grand-total">
+                    <div class="total-label">TOTAL</div>
+                    <div class="total-value" id="grand-total">0%</div>
+                </div>
+            </div>
+
+            <div class="sync-reminder">
+                <i class="fas fa-sync-alt"></i> 2 Timeframes MUST be in Sync: +20%
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:20px; margin-top:24px;">
+    <div class="grade-display" id="grade-display">—</div>
+    <button id="gradeLogBtn" class="journal-action-btn">
+        <i class="fas fa-book"></i> Add to Journal
+    </button>
+</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-lightbulb"></i> Guide
+                </div>
+            </div>
+            <ul class="guide-list">
+                <li><span class="grade-tag grade-a">A+ Setup</span> = 90+</li>
+                <li><span class="grade-tag grade-b">B+ Setup</span> = 80+</li>
+                <li><span class="grade-tag grade-c">C+ Setup</span> = 70+</li>
+                <li><span class="grade-tag grade-d">D+ Setup</span> = 60+</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Journal Modal & Overlay -->
+    <div id="journalOverlay" class="journal-overlay"></div>
+    <div id="journalModal" class="journal-modal">
+        <div class="card journal-card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-book"></i> Log Trade</div>
+                <button class="fab-btn modal-close" id="closeJournalModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="journal-form">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="tradeDate" class="journal-input">
+                </div>
+             <!-- In Edit Trade Modal -->
+<div class="form-group">
+    <label>Pair</label>
+    <div class="searchable-select">
+        <input type="text" id="editPairSearch" class="journal-input" placeholder="e.g. EURUSD, BTCUSD, XAUUSD">
+        <div id="editPairDropdown" class="select-dropdown"></div>
+        <input type="hidden" id="editPair" required>
+    </div>
+</div>
+                <div class="form-group">
+                    <label>Direction</label>
+                    <select id="tradeDir" class="journal-input">
+                        <option>Long</option>
+                        <option>Short</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Outcome</label>
+                    <select id="tradeOutcome" class="journal-input">
+                        <option>Win</option>
+                        <option>Loss</option>
+                        <option>Break-even</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notes (optional)</label>
+                    <textarea id="tradeNotes" class="journal-input" rows="2" placeholder="e.g. Ignored H4 trend"></textarea>
+                </div>
+                        <div class="form-group">
+                    <label>📷 Before Chart (Entry)</label>
+                    <div class="image-dropzone" id="beforeDropzone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop or <strong>click to upload</strong></p>
+                        <input type="file" id="imgBefore" accept="image/*" hidden>
+                    </div>
+                    <div id="beforePreview" class="image-preview"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>📷 After Chart (Exit)</label>
+                    <div class="image-dropzone" id="afterDropzone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop or <strong>click to upload</strong></p>
+                        <input type="file" id="imgAfter" accept="image/*" hidden>
+                    </div>
+    <div id="afterPreview" class="image-preview"></div>
+</div>
+                <div class="form-group">
+                    <label>🎯 Checklist Grade (Auto-filled)</label>
+                    <input type="text" id="tradeGrade" class="journal-input" readonly>
+                </div>
+                <div class="form-actions">
+                    <button class="fab-btn" id="saveTradeBtn">
+                        <i class="fas fa-save"></i> Save Trade
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Journal Page -->
+    <div id="journalPage" class="journal-page">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-chart-line"></i> Trade Journal & Stats</div>
+                <button class="fab-btn" id="backToChecklist">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+            <div class="totals-bar journal-stats">
+                <div class="total-box">
+                    <div class="total-label">Total Trades</div>
+                    <div class="total-value" id="stat-total">0</div>
+                </div>
+                <div class="total-box">
+                    <div class="total-label">Wins</div>
+                    <div class="total-value wins" id="stat-wins">0</div>
+                </div>
+                <div class="total-box">
+                    <div class="total-label">Losses</div>
+                    <div class="total-value losses" id="stat-losses">0</div>
+                </div>
+                <div class="total-box grand-total">
+                    <div class="total-label">Win Rate</div>
+                    <div class="total-value" id="stat-winrate">—</div>
+                </div>
+            </div>
+            <div class="journal-table-container">
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Pair</th>
+                            <th>Dir</th>
+                            <th>Outcome</th>
+                            <th>Grade</th>
+                            <th>Before</th>
+                            <th>After</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="journalTableBody">
+                        <tr><td colspan="9" class="no-trades">No trades logged yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<!-- ===== Edit Trade Modal ===== -->
+<div id="editOverlay" class="journal-overlay"></div>
+<div id="editModal" class="journal-modal">
+    <div class="card journal-card">
+        <div class="card-header">
+            <div class="card-title"><i class="fas fa-edit"></i> Edit Trade</div>
+            <button class="fab-btn modal-close" id="closeEditModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="journal-form">
+            <input type="hidden" id="editTradeId">
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="editDate" class="journal-input">
+            </div>
+          <!-- In Log Trade Modal -->
+<div class="form-group">
+    <label>Pair</label>
+    <div class="searchable-select">
+        <input type="text" id="tradePairSearch" class="journal-input" placeholder="e.g. EURUSD, BTCUSD, XAUUSD">
+        <div id="tradePairDropdown" class="select-dropdown"></div>
+        <input type="hidden" id="tradePair" required>
+    </div>
+</div>
+            <div class="form-group">
+                <label>Direction</label>
+                <select id="editDir" class="journal-input">
+                    <option>Long</option>
+                    <option>Short</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Outcome</label>
+                <select id="editOutcome" class="journal-input">
+                    <option>Win</option>
+                    <option>Loss</option>
+                    <option>Break-even</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Grade</label>
+                <input type="text" id="editGrade" class="journal-input" maxlength="3">
+            </div>
+            <div class="form-group">
+                <label>Notes</label>
+                <textarea id="editNotes" class="journal-input" rows="2"></textarea>
+            </div>
+    
+                        <!-- In Edit Modal -->
+                <div class="form-group">
+                    <label>📷 Before Chart (Entry)</label>
+                    <div class="image-dropzone" id="editBeforeDropzone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop or <strong>click to upload</strong></p>
+                        <input type="file" id="editImgBefore" accept="image/*" hidden>
+                    </div>
+                    <div id="editBeforePreview" class="image-preview"></div> <!-- ✅ Unique ID -->
+                </div>
+
+                <div class="form-group">
+                    <label>📷 After Chart (Exit)</label>
+                    <div class="image-dropzone" id="editAfterDropzone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop or <strong>click to upload</strong></p>
+                        <input type="file" id="editImgAfter" accept="image/*" hidden>
+                    </div>
+                    <div id="editAfterPreview" class="image-preview"></div> <!-- ✅ Unique ID -->
+                </div>
+                <div class="form-actions">
+                <button class="fab-btn" id="updateTradeBtn" style="background:var(--accent);">
+                    <i class="fas fa-check"></i> Update Trade
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="Set.js"></script>
+</body>
+</html>
