@@ -1,3 +1,23 @@
+// ✅ GLOBAL: Clear image uploads — MUST be outside DOMContentLoaded
+function clearImageUploads() {
+    // Clear previews
+    const beforePreview = document.getElementById('beforePreview');
+    const afterPreview = document.getElementById('afterPreview');
+    const editBeforePreview = document.getElementById('editBeforePreview');
+    const editAfterPreview = document.getElementById('editAfterPreview');
+    if (beforePreview) beforePreview.innerHTML = '';
+    if (afterPreview) afterPreview.innerHTML = '';
+    if (editBeforePreview) editBeforePreview.innerHTML = '';
+    if (editAfterPreview) editAfterPreview.innerHTML = '';
+
+    // Reset file inputs
+    const inputs = ['imgBefore', 'imgAfter', 'editImgBefore', 'editImgAfter'];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // ===== Core UI Elements =====
     const themeToggle = document.getElementById('themeToggle');
@@ -24,67 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.scrollTo(0, scrollY);
         }
     }
-    // Add this INSIDE document.addEventListener('DOMContentLoaded', () => { ... })
-// e.g., right before the closing });
-
-// ✅ Safe: Attached to window, no syntax risk
-window.editTrade = function(id) {
-    console.log('Edit called with ID:', id);
-    
-    const journal = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
-    const trade = journal.find(t => t.id === id);
-    if (!trade) return alert('Trade not found');
-
-    // Fill form
-    document.getElementById('editTradeId').value = trade.id;
-    document.getElementById('editDate').value = trade.date;
-    document.getElementById('editPair').value = trade.pair;
-    document.getElementById('editDir').value = trade.dir;
-    document.getElementById('editOutcome').value = trade.outcome;
-    document.getElementById('editGrade').value = trade.grade || '';
-    document.getElementById('editNotes').value = trade.notes || '';
-
-    // Preview images
-    const bp = document.getElementById('beforePreview');
-    const ap = document.getElementById('afterPreview');
-    if (bp && trade.imgBefore) bp.innerHTML = `<img src="${trade.imgBefore}" width="80">`;
-    if (ap && trade.imgAfter) ap.innerHTML = `<img src="${trade.imgAfter}" width="80">`;
-
-    // Open modal
-    document.getElementById('editOverlay')?.classList.add('active');
-    document.getElementById('editModal')?.classList.add('active');s
-};
-// ===== Symbol List =====
-const SYMBOLS = [
-    { group: ' Forex Majors', list: ['AUDUSD', 'EURUSD', 'GBPUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'USDJPY'] 
-  },
-    { group: ' Forex Minors',    list: ['AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'CADCHF', 'CADJPY', 'CHFJPY', 'EURAUD', 'EURCAD', 'EURCHF', 'EURGBP', 'EURJPY', 'EURNZD', 'GBPAUD', 'GBPCAD', 'GBPJPY', 'GBPNZD', 'NZDCHF', 'NZDJPY']
-  },
-    { group: ' Crypto', list: ['BTCUSD', 'ETHUSD', 'SOLUSD', 'XRPUSD', 'DOGEUSD', 'ADAUSD', 'DOTUSD', 'BNBUSD'] },
-    { group: ' Commodities', list: ['XAUUSD', 'XAGUSD', 'USOIL', 'UKOIL', 'NGAS', 'COPPER'] },
-    { group: ' Indices', list: ['SPX500', 'NAS100', 'DJI30', 'GER40', 'UK100', 'JP225'] }
-];
-
-    // ===== Helper: Clear image uploads =====
-    function clearImageUploads() {
-        // Clear previews
-        const beforePreview = document.getElementById('beforePreview');
-        const afterPreview = document.getElementById('afterPreview');
-        if (beforePreview) beforePreview.innerHTML = '';
-        if (afterPreview) afterPreview.innerHTML = '';
-
-        // Reset file inputs (Log)
-        const imgBefore = document.getElementById('imgBefore');
-        const imgAfter = document.getElementById('imgAfter');
-        if (imgBefore) imgBefore.value = '';
-        if (imgAfter) imgAfter.value = '';
-
-        // Reset file inputs (Edit)
-        const editImgBefore = document.getElementById('editImgBefore');
-        const editImgAfter = document.getElementById('editImgAfter');
-        if (editImgBefore) editImgBefore.value = '';
-        if (editImgAfter) editImgAfter.value = '';
-    }
 
     // ===== Theme Handling =====
     const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -99,7 +58,6 @@ const SYMBOLS = [
         const isLight = body.classList.contains('light-theme');
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
     });
-    
 
     // ===== Reset =====
     function resetChecklist() {
@@ -179,6 +137,104 @@ const SYMBOLS = [
         fixedActions?.classList.add('hidden');
     }
 
+    // ===== Symbol List =====
+    const SYMBOLS = [
+        { group: ' Forex Majors', list: ['AUDUSD', 'EURUSD', 'GBPUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'USDJPY'] },
+        { group: ' Forex Minors', list: ['AUDCAD', 'AUDCHF', 'AUDJPY', 'AUDNZD', 'CADCHF', 'CADJPY', 'CHFJPY', 'EURAUD', 'EURCAD', 'EURCHF', 'EURGBP', 'EURJPY', 'EURNZD', 'GBPAUD', 'GBPCAD', 'GBPJPY', 'GBPNZD', 'NZDCHF', 'NZDJPY'] },
+        { group: ' Crypto', list: ['BTCUSD', 'ETHUSD', 'SOLUSD', 'XRPUSD', 'DOGEUSD', 'ADAUSD', 'DOTUSD', 'BNBUSD'] },
+        { group: ' Commodities', list: ['XAUUSD', 'XAGUSD', 'USOIL', 'UKOIL', 'NGAS', 'COPPER'] },
+        { group: ' Indices', list: ['SPX500', 'NAS100', 'DJI30', 'GER40', 'UK100', 'JP225'] }
+    ];
+
+    // ===== Searchable Select =====
+    function initSearchableSelect(searchId, dropdownId, hiddenId) {
+        const searchInput = document.getElementById(searchId);
+        const dropdown = document.getElementById(dropdownId);
+        const hiddenInput = document.getElementById(hiddenId);
+
+        if (!searchInput || !dropdown || !hiddenInput) return;
+
+        function renderDropdown(filter = '') {
+            let html = '';
+            SYMBOLS.forEach(group => {
+                const filtered = group.list.filter(sym => 
+                    sym.toLowerCase().includes(filter.toLowerCase())
+                );
+                if (filtered.length > 0) {
+                    html += `<div class="select-option category">${group.group}</div>`;
+                    filtered.forEach(sym => {
+                        html += `<div class="select-option" data-value="${sym}">${sym}</div>`;
+                    });
+                }
+            });
+            dropdown.innerHTML = html || '<div class="select-option">No matches</div>';
+        }
+
+        searchInput.addEventListener('focus', () => {
+            renderDropdown(searchInput.value);
+            dropdown.classList.add('active');
+        });
+
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => dropdown.classList.remove('active'), 150);
+        });
+
+        searchInput.addEventListener('input', () => {
+            searchInput.value = searchInput.value.toUpperCase();
+            renderDropdown(searchInput.value);
+            dropdown.classList.add('active');
+        });
+
+        searchInput.addEventListener('paste', e => {
+            setTimeout(() => {
+                searchInput.value = searchInput.value.toUpperCase();
+                renderDropdown(searchInput.value);
+            }, 10);
+        });
+
+        dropdown.addEventListener('click', e => {
+            const option = e.target.closest('.select-option:not(.category)');
+            if (option) {
+                const value = option.dataset.value;
+                searchInput.value = value;
+                hiddenInput.value = value;
+                dropdown.classList.remove('active');
+                searchInput.focus();
+            }
+        });
+
+        searchInput.addEventListener('keydown', e => {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const first = dropdown.querySelector('.select-option:not(.category)');
+                if (first) first.focus();
+            }
+        });
+
+        dropdown.addEventListener('keydown', e => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                const items = Array.from(dropdown.querySelectorAll('.select-option:not(.category)'));
+                const current = document.activeElement;
+                let index = items.indexOf(current);
+                index += e.key === 'ArrowDown' ? 1 : -1;
+                if (index < 0) index = items.length - 1;
+                if (index >= items.length) index = 0;
+                items[index]?.focus();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                const active = document.activeElement;
+                if (active.classList.contains('select-option')) {
+                    const value = active.dataset.value;
+                    searchInput.value = value;
+                    hiddenInput.value = value;
+                    dropdown.classList.remove('active');
+                    searchInput.focus();
+                }
+            }
+        });
+    }
+
     // ===== Modals =====
     const journalModal = document.getElementById('journalModal');
     const journalOverlay = document.getElementById('journalOverlay');
@@ -192,109 +248,10 @@ const SYMBOLS = [
 
     const backToChecklist = document.getElementById('backToChecklist');
     const journalPage = document.getElementById('journalPage');
-    // ===== Searchable Select =====
-function initSearchableSelect(searchId, dropdownId, hiddenId) {
-    const searchInput = document.getElementById(searchId);
-    const dropdown = document.getElementById(dropdownId);
-    const hiddenInput = document.getElementById(hiddenId);
 
-    if (!searchInput || !dropdown || !hiddenInput) return;
-
-    // Render dropdown
-    function renderDropdown(filter = '') {
-        let html = '';
-        SYMBOLS.forEach(group => {
-            const filtered = group.list.filter(sym => 
-                sym.toLowerCase().includes(filter.toLowerCase())
-            );
-            if (filtered.length > 0) {
-                html += `<div class="select-option category">${group.group}</div>`;
-                filtered.forEach(sym => {
-                    html += `<div class="select-option" data-value="${sym}">${sym}</div>`;
-                });
-            }
-        });
-        dropdown.innerHTML = html || '<div class="select-option">No matches</div>';
-    }
-
-    // Open/close
-    searchInput.addEventListener('focus', () => {
-        renderDropdown(searchInput.value);
-        dropdown.classList.add('active');
-    });
-
-    searchInput.addEventListener('blur', () => {
-        setTimeout(() => dropdown.classList.remove('active'), 150);
-    });
-
-    // Type to filter
-    searchInput.addEventListener('input', () => {
-        renderDropdown(searchInput.value);
-        dropdown.classList.add('active');
-    });
-
-    // Select option
-    dropdown.addEventListener('click', e => {
-        const option = e.target.closest('.select-option:not(.category)');
-        if (option) {
-            const value = option.dataset.value;
-            searchInput.value = value;
-            hiddenInput.value = value;
-            dropdown.classList.remove('active');
-            searchInput.focus();
-        }
-    });
-
-    // Keyboard navigation
-    searchInput.addEventListener('keydown', e => {
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            const first = dropdown.querySelector('.select-option:not(.category)');
-            if (first) first.focus();
-        }
-    });
-
-    dropdown.addEventListener('keydown', e => {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-            e.preventDefault();
-            const items = Array.from(dropdown.querySelectorAll('.select-option:not(.category)'));
-            const current = document.activeElement;
-            let index = items.indexOf(current);
-            index += e.key === 'ArrowDown' ? 1 : -1;
-            if (index < 0) index = items.length - 1;
-            if (index >= items.length) index = 0;
-            items[index]?.focus();
-        } else if (e.key === 'Enter') {
-            e.preventDefault();
-            const active = document.activeElement;
-            if (active.classList.contains('select-option')) {
-                const value = active.dataset.value;
-                searchInput.value = value;
-                hiddenInput.value = value;
-                dropdown.classList.remove('active');
-                searchInput.focus();
-            }
-        }
-    });
-}
-
-// Initialize both
-initSearchableSelect('tradePairSearch', 'tradePairDropdown', 'tradePair');
-initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
-// Force uppercase for pair inputs
-['tradePairSearch', 'editPairSearch'].forEach(id => {
-    const input = document.getElementById(id);
-    if (input) {
-        input.addEventListener('input', () => {
-            input.value = input.value.toUpperCase();
-        });
-    }
-    input.addEventListener('paste', e => {
-    setTimeout(() => {
-        input.value = input.value.toUpperCase();
-    }, 10);
-});
-});
+    // Initialize searchable selects
+    initSearchableSelect('tradePairSearch', 'tradePairDropdown', 'tradePair');
+    initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
 
     // Set today
     const dateInput = document.getElementById('tradeDate');
@@ -314,7 +271,7 @@ initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
         journalOverlay.classList.add('active');
         journalModal.classList.add('active');
         toggleBodyScroll(true);
-        document.getElementById('tradePair')?.focus();
+        document.getElementById('tradePairSearch')?.focus();
     });
 
     // Log Trade Modal
@@ -342,21 +299,26 @@ initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
         });
     });
 
-    // Save trade
+    // Save trade ✅ FIXED
     saveTradeBtn?.addEventListener('click', async () => {
-        const date = document.getElementById('tradeDate')?.value;
-        const pair = document.getElementById('tradePair')?.value.trim().toUpperCase();
+        const dateEl = document.getElementById('tradeDate');
+        const pairHiddenEl = document.getElementById('tradePair');
+        const date = dateEl ? dateEl.value : '';
+        const pair = pairHiddenEl ? pairHiddenEl.value.trim().toUpperCase() : '';
+
+        if (!date || !pair) {
+            alert('⚠️ Please select a date and pair.');
+            if (!date) dateEl?.focus();
+            else document.getElementById('tradePairSearch')?.focus();
+            return;
+        }
+
         const dir = document.getElementById('tradeDir')?.value;
         const outcome = document.getElementById('tradeOutcome')?.value;
         const notes = document.getElementById('tradeNotes')?.value.trim();
         const grade = document.getElementById('tradeGrade')?.value || '—';
         const beforeFile = document.getElementById('imgBefore')?.files[0];
         const afterFile = document.getElementById('imgAfter')?.files[0];
-
-        if (!date || !pair) {
-            alert('⚠️ Please enter date and pair.');
-            return;
-        }
 
         const toBase64 = file => new Promise(res => {
             if (!file) return res(null);
@@ -365,8 +327,8 @@ initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
             reader.readAsDataURL(file);
         });
 
-        const imgBefore = beforeFile ? await toBase64(beforeFile) : null;
-        const imgAfter = afterFile ? await toBase64(afterFile) : null;
+        const imgBefore = await toBase64(beforeFile);
+        const imgAfter = await toBase64(afterFile);
 
         const trade = {
             id: Date.now(),
@@ -378,7 +340,6 @@ initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
         journal.push(trade);
         localStorage.setItem('tradeJournal', JSON.stringify(journal));
 
-        // Close & go home
         journalOverlay.classList.remove('active');
         journalModal.classList.remove('active');
         toggleBodyScroll(false);
@@ -401,9 +362,9 @@ initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
         });
     });
 
-    // Update trade
+    // Update trade ✅ FIXED
     updateTradeBtn?.addEventListener('click', async () => {
-        const id = parseInt(document.getElementById('editTradeId').value);
+        const id = parseInt(document.getElementById('editTradeId')?.value);
         if (!id) return;
 
         let journal = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
@@ -412,20 +373,20 @@ initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
 
         const current = journal[tradeIndex];
 
-        const date = document.getElementById('editDate').value;
-        const pair = document.getElementById('editPair').value.trim().toUpperCase();
-        const dir = document.getElementById('editDir').value;
-        const outcome = document.getElementById('editOutcome').value;
-        const grade = document.getElementById('editGrade').value.trim();
-        const notes = document.getElementById('editNotes').value.trim();
+        const date = document.getElementById('editDate')?.value;
+        const pair = document.getElementById('editPair')?.value.trim().toUpperCase();
+        const dir = document.getElementById('editDir')?.value;
+        const outcome = document.getElementById('editOutcome')?.value;
+        const grade = document.getElementById('editGrade')?.value.trim();
+        const notes = document.getElementById('editNotes')?.value.trim();
 
         if (!date || !pair) {
             alert('⚠️ Date and Pair are required.');
             return;
         }
 
-        const beforeFile = document.getElementById('editImgBefore').files[0];
-        const afterFile = document.getElementById('editImgAfter').files[0];
+        const beforeFile = document.getElementById('editImgBefore')?.files[0];
+        const afterFile = document.getElementById('editImgAfter')?.files[0];
 
         const toBase64 = file => new Promise(res => {
             if (!file) return res(null);
@@ -467,7 +428,7 @@ initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
         toggleBodyScroll(false);
     });
 
-    // ===== Image Upload: Drag, Drop, Click, Paste =====
+    // ===== Image Upload =====
     function setupImageUpload(dropzoneId, inputId, previewId) {
         const dropzone = document.getElementById(dropzoneId);
         const input = document.getElementById(inputId);
@@ -475,16 +436,13 @@ initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
 
         if (!dropzone || !input) return;
 
-        // Click to upload
         dropzone.addEventListener('click', () => input.click());
 
-        // File select
         input.addEventListener('change', e => {
             const file = e.target.files[0];
             if (file) handleImage(file, preview);
         });
 
-        // Drag & Drop
         dropzone.addEventListener('dragover', e => {
             e.preventDefault();
             dropzone.classList.add('drag-over');
@@ -511,19 +469,17 @@ initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
         if (!previewEl) return;
         const reader = new FileReader();
         reader.onload = e => {
-            previewEl.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">`;
+            previewEl.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width:100%;max-height:200px;border-radius:8px;margin-top:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">`;
         };
         reader.readAsDataURL(file);
     }
 
-// Keep Log modals using shared previews
-setupImageUpload('beforeDropzone', 'imgBefore', 'beforePreview');
-setupImageUpload('afterDropzone', 'imgAfter', 'afterPreview');
+    setupImageUpload('beforeDropzone', 'imgBefore', 'beforePreview');
+    setupImageUpload('afterDropzone', 'imgAfter', 'afterPreview');
+    setupImageUpload('editBeforeDropzone', 'editImgBefore', 'editBeforePreview');
+    setupImageUpload('editAfterDropzone', 'editImgAfter', 'editAfterPreview');
 
-// ✅ Edit modals use their own previews
-setupImageUpload('editBeforeDropzone', 'editImgBefore', 'editBeforePreview');
-setupImageUpload('editAfterDropzone', 'editImgAfter', 'editAfterPreview');
-    // Global paste handler
+    // Global paste
     document.addEventListener('paste', e => {
         const items = e.clipboardData?.items;
         if (!items) return;
@@ -532,21 +488,20 @@ setupImageUpload('editAfterDropzone', 'editImgAfter', 'editAfterPreview');
             if (item.type.startsWith('image/')) {
                 const file = item.getAsFile();
                 if (file) {
-                    const activeEl = document.activeElement;
                     const targets = [
-                        { dropzone: 'beforeDropzone', input: 'imgBefore' },
-                        { dropzone: 'afterDropzone', input: 'imgAfter' },
-                        { dropzone: 'editBeforeDropzone', input: 'editImgBefore' },
-                        { dropzone: 'editAfterDropzone', input: 'editImgAfter' }
+                        { dz: 'beforeDropzone', in: 'imgBefore', pv: 'beforePreview' },
+                        { dz: 'afterDropzone', in: 'imgAfter', pv: 'afterPreview' },
+                        { dz: 'editBeforeDropzone', in: 'editImgBefore', pv: 'editBeforePreview' },
+                        { dz: 'editAfterDropzone', in: 'editImgAfter', pv: 'editAfterPreview' }
                     ];
-                    
                     for (let t of targets) {
-                        const dz = document.getElementById(t.dropzone);
-                        if (dz && (dz === activeEl || dz.contains(activeEl))) {
+                        const dz = document.getElementById(t.dz);
+                        const active = document.activeElement;
+                        if (dz && (dz === active || dz.contains(active))) {
                             const dt = new DataTransfer();
                             dt.items.add(file);
-                            document.getElementById(t.input).files = dt.files;
-                            handleImage(file, document.getElementById('beforePreview'));
+                            document.getElementById(t.in).files = dt.files;
+                            handleImage(file, document.getElementById(t.pv));
                             e.preventDefault();
                             return;
                         }
@@ -573,17 +528,17 @@ setupImageUpload('editAfterDropzone', 'editImgAfter', 'editAfterPreview');
 
         const grandTotal = weekly + daily + fourHour + oneHour + entry;
 
-        const update = (id, text) => {
+        const safeSet = (id, text) => {
             const el = document.getElementById(id);
             if (el) el.textContent = text;
         };
 
-        update('total-weekly', weekly + '%');
-        update('total-daily', daily + '%');
-        update('total-4hour', fourHour + '%');
-        update('total-1hour', oneHour + '%');
-        update('entry-signal', entry + '%');
-        update('grand-total', grandTotal + '%');
+        safeSet('total-weekly', weekly + '%');
+        safeSet('total-daily', daily + '%');
+        safeSet('total-4hour', fourHour + '%');
+        safeSet('total-1hour', oneHour + '%');
+        safeSet('entry-signal', entry + '%');
+        safeSet('grand-total', grandTotal + '%');
         updateGrade(grandTotal);
     }
 
@@ -622,14 +577,14 @@ setupImageUpload('editAfterDropzone', 'editImgAfter', 'editAfterPreview');
         const total = journal.length;
         const winRate = total ? `${((wins / total) * 100).toFixed(1)}%` : '—';
 
-        const update = (id, text) => {
+        const safeSet = (id, text) => {
             const el = document.getElementById(id);
             if (el) el.textContent = text;
         };
-        update('stat-total', total);
-        update('stat-wins', wins);
-        update('stat-losses', losses);
-        update('stat-winrate', winRate);
+        safeSet('stat-total', total);
+        safeSet('stat-wins', wins);
+        safeSet('stat-losses', losses);
+        safeSet('stat-winrate', winRate);
 
         const tbody = document.getElementById('journalTableBody');
         if (!tbody) return;
@@ -696,7 +651,8 @@ setupImageUpload('editAfterDropzone', 'editImgAfter', 'editAfterPreview');
 
 // ✅ GLOBAL: Edit trade
 window.editTrade = function(id) {
-    clearImageUploads();
+    clearImageUploads(); // ✅ Now works — function is global
+
     const journal = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
     const trade = journal.find(t => t.id === id);
     if (!trade) {
@@ -705,32 +661,39 @@ window.editTrade = function(id) {
     }
 
     // Fill form
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
-    set('editTradeId', trade.id);
-    set('editDate', trade.date);
-    set('editPair', trade.pair);
-    set('editDir', trade.dir);
-    set('editOutcome', trade.outcome);
-    set('editGrade', trade.grade || '');
-    set('editNotes', trade.notes || '');
+    const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+    };
+    setVal('editTradeId', trade.id);
+    setVal('editDate', trade.date);
+    setVal('editPair', trade.pair);
+    setVal('editDir', trade.dir);
+    setVal('editOutcome', trade.outcome);
+    setVal('editGrade', trade.grade || '');
+    setVal('editNotes', trade.notes || '');
 
     // Preview images
-   // New: use edit-specific previews
-const editBeforePreview = document.getElementById('editBeforePreview');
-const editAfterPreview = document.getElementById('editAfterPreview');
-
-if (editBeforePreview && trade.imgBefore) {
-    editBeforePreview.innerHTML = `<img src="${trade.imgBefore}" alt="Before" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">`;
-}
-if (editAfterPreview && trade.imgAfter) {
-    editAfterPreview.innerHTML = `<img src="${trade.imgAfter}" alt="After" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">`;
-}
+    const editBeforePreview = document.getElementById('editBeforePreview');
+    const editAfterPreview = document.getElementById('editAfterPreview');
+    if (editBeforePreview && trade.imgBefore) {
+        editBeforePreview.innerHTML = `<img src="${trade.imgBefore}" alt="Before" style="max-width:100%;max-height:200px;border-radius:8px;margin-top:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">`;
+    }
+    if (editAfterPreview && trade.imgAfter) {
+        editAfterPreview.innerHTML = `<img src="${trade.imgAfter}" alt="After" style="max-width:100%;max-height:200px;border-radius:8px;margin-top:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">`;
+    }
 
     // Open modal
     document.getElementById('editOverlay')?.classList.add('active');
     document.getElementById('editModal')?.classList.add('active');
-    toggleBodyScroll(true);
-    document.getElementById('editPair')?.focus();
+
+    const scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+
+    document.getElementById('editPairSearch')?.focus();
 };
 
 // ✅ GLOBAL: Delete trade
@@ -768,10 +731,8 @@ window.deleteTrade = (id) => {
         winRateEl.textContent = winRate;
     }
 
-    // Handle empty state
     const tbody = document.getElementById('journalTableBody');
     if (tbody && journal.length === 0) {
         tbody.innerHTML = `<tr><td colspan="9" class="no-trades">No trades logged yet.</td></tr>`;
     }
-    
 };
