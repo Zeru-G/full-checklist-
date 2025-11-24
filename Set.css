@@ -1044,3 +1044,203 @@ body:has(.journal-overlay.active) {
     background: rgba(0, 123, 255, 0.1);
     color: var(--accent);
 }
+/* ===== Image Upload Container ===== */
+.image-upload-container {
+    position: relative;
+}
+
+.image-dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.03);
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 8px;
+}
+
+.image-dropzone:hover,
+.image-dropzone.drag-over {
+    border-color: var(--accent);
+    background: rgba(0, 245, 212, 0.05);
+    transform: translateY(-2px);
+}
+
+.image-dropzone i {
+    font-size: 28px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.image-dropzone p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.image-dropzone p strong {
+    color: var(--accent);
+}
+
+.image-preview {
+    position: relative;
+    margin-top: 12px;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Remove button */
+.remove-image-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--danger);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: var(--transition);
+}
+
+.remove-image-btn:hover {
+    background: #ff3333;
+    transform: scale(1.1);
+}
+
+/* Light mode */
+.light-theme .remove-image-btn {
+    background: #cc0000;
+}
+
+.light-theme .remove-image-btn:hover {
+    background: #ff3333;
+}
+/* ===== Journal Overlay & Modal ===== */
+.journal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.journal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.journal-modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease;
+}
+
+.journal-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Image Upload Container */
+.image-upload-container {
+    position: relative;
+}
+
+/* Remove Button */
+.remove-image-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--danger);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.remove-image-btn:hover {
+    background: #ff3333;
+    transform: scale(1.1);
+}
+
+/* Light mode */
+.light-theme .remove-image-btn {
+    background: #cc0000;
+}
+
+.light-theme .remove-image-btn:hover {
+    background: #ff3333;
+}
+
+/* Searchable Select Dropdown */
+.select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    margin-top: 4px;
+}
+
+.select-dropdown.active {
+    display: block;
+}
+
+.select-option {
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-primary);
+}
+
+.select-option:hover,
+.select-option.selected {
+    background: rgba(0, 245, 212, 0.15);
+    color: var(--accent);
+}
+
+.select-option.category {
+    font-weight: 700;
+    color: var(--text-secondary);
+    padding: 8px 16px 4px;
+    border-top: 1px solid var(--border);
+}
