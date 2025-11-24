@@ -224,23 +224,30 @@
                     <label>Notes (optional)</label>
                     <textarea id="tradeNotes" class="journal-input" rows="2" placeholder="e.g. Ignored H4 trend"></textarea>
                 </div>
+           <!-- BEFORE -->
                 <div class="form-group">
                     <label>📷 Before Chart (Entry)</label>
-                    <div class="image-dropzone" id="beforeDropzone">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Drag & drop or <strong>click to upload</strong></p>
-                        <input type="file" id="imgBefore" accept="image/*" hidden>
+                    <div id="beforeUploadContainer" class="image-upload-container">
+                        <div class="image-dropzone" id="beforeDropzone">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop or <strong>click to upload</strong></p>
+                            <input type="file" id="imgBefore" accept="image/*" hidden>
+                        </div>
+                        <div id="beforePreview" class="image-preview"></div>
                     </div>
-                    <div id="beforePreview" class="image-preview"></div>
                 </div>
+
+                <!-- AFTER -->
                 <div class="form-group">
                     <label>📷 After Chart (Exit)</label>
-                    <div class="image-dropzone" id="afterDropzone">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Drag & drop or <strong>click to upload</strong></p>
-                        <input type="file" id="imgAfter" accept="image/*" hidden>
+                    <div id="afterUploadContainer" class="image-upload-container">
+                        <div class="image-dropzone" id="afterDropzone">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop or <strong>click to upload</strong></p>
+                            <input type="file" id="imgAfter" accept="image/*" hidden>
+                        </div>
+                        <div id="afterPreview" class="image-preview"></div>
                     </div>
-                    <div id="afterPreview" class="image-preview"></div>
                 </div>
                 <div class="form-group">
                     <label>🎯 Checklist Grade (Auto-filled)</label>
@@ -302,23 +309,30 @@
                     <label>Notes</label>
                     <textarea id="editNotes" class="journal-input" rows="2"></textarea>
                 </div>
+               <!-- BEFORE -->
                 <div class="form-group">
                     <label>📷 Before Chart (Entry)</label>
-                    <div class="image-dropzone" id="editBeforeDropzone">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Drag & drop or <strong>click to upload</strong></p>
-                        <input type="file" id="editImgBefore" accept="image/*" hidden>
+                    <div id="editBeforeUploadContainer" class="image-upload-container">
+                        <div class="image-dropzone" id="editBeforeDropzone">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop or <strong>click to upload</strong></p>
+                            <input type="file" id="editImgBefore" accept="image/*" hidden>
+                        </div>
+                        <div id="editBeforePreview" class="image-preview"></div>
                     </div>
-                    <div id="editBeforePreview" class="image-preview"></div>
                 </div>
+
+                <!-- AFTER -->
                 <div class="form-group">
                     <label>📷 After Chart (Exit)</label>
-                    <div class="image-dropzone" id="editAfterDropzone">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Drag & drop or <strong>click to upload</strong></p>
-                        <input type="file" id="editImgAfter" accept="image/*" hidden>
+                    <div id="editAfterUploadContainer" class="image-upload-container">
+                        <div class="image-dropzone" id="editAfterDropzone">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop or <strong>click to upload</strong></p>
+                            <input type="file" id="editImgAfter" accept="image/*" hidden>
+                        </div>
+                        <div id="editAfterPreview" class="image-preview"></div>
                     </div>
-                    <div id="editAfterPreview" class="image-preview"></div>
                 </div>
                 <div class="form-actions">
                     <button class="fab-btn" id="updateTradeBtn" style="background:var(--accent);">
@@ -378,7 +392,6 @@
             </div>
         </div>
     </div>
-
     <script src="Set.js"></script>
 </body>
 </html>
