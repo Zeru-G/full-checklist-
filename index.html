@@ -19,6 +19,9 @@
             <button class="fab-btn" id="viewJournalBtn" title="View Trade Journal">
                 <i class="fas fa-book-open"></i>
             </button>
+            <button class="fab-btn" id="calcBtn" title="Position Size Calculator">
+                <i class="fas fa-calculator"></i>
+            </button>
             <button class="fab-btn theme-toggle" id="themeToggle" title="Toggle Theme">
                 <i class="fas fa-moon"></i>
                 <i class="fas fa-sun"></i>
@@ -160,11 +163,11 @@
             </div>
 
             <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:20px; margin-top:24px;">
-    <div class="grade-display" id="grade-display">—</div>
-    <button id="gradeLogBtn" class="journal-action-btn">
-        <i class="fas fa-book"></i> Add to Journal
-    </button>
-</div>
+                <div class="grade-display" id="grade-display">—</div>
+                <button id="gradeLogBtn" class="journal-action-btn">
+                    <i class="fas fa-book"></i> Add to Journal
+                </button>
+            </div>
         </div>
 
         <div class="card">
@@ -182,7 +185,7 @@
         </div>
     </div>
 
-        <!-- Journal Modal & Overlay -->
+    <!-- Journal Modal & Overlay -->
     <div id="journalOverlay" class="journal-overlay"></div>
     <div id="journalModal" class="journal-modal">
         <div class="card journal-card">
@@ -224,7 +227,6 @@
                     <label>Notes (optional)</label>
                     <textarea id="tradeNotes" class="journal-input" rows="2" placeholder="e.g. Ignored H4 trend"></textarea>
                 </div>
-           <!-- BEFORE -->
                 <div class="form-group">
                     <label>📷 Before Chart (Entry)</label>
                     <div id="beforeUploadContainer" class="image-upload-container">
@@ -236,8 +238,6 @@
                         <div id="beforePreview" class="image-preview"></div>
                     </div>
                 </div>
-
-                <!-- AFTER -->
                 <div class="form-group">
                     <label>📷 After Chart (Exit)</label>
                     <div id="afterUploadContainer" class="image-upload-container">
@@ -309,7 +309,6 @@
                     <label>Notes</label>
                     <textarea id="editNotes" class="journal-input" rows="2"></textarea>
                 </div>
-               <!-- BEFORE -->
                 <div class="form-group">
                     <label>📷 Before Chart (Entry)</label>
                     <div id="editBeforeUploadContainer" class="image-upload-container">
@@ -321,8 +320,6 @@
                         <div id="editBeforePreview" class="image-preview"></div>
                     </div>
                 </div>
-
-                <!-- AFTER -->
                 <div class="form-group">
                     <label>📷 After Chart (Exit)</label>
                     <div id="editAfterUploadContainer" class="image-upload-container">
@@ -338,6 +335,81 @@
                     <button class="fab-btn" id="updateTradeBtn" style="background:var(--accent);">
                         <i class="fas fa-check"></i> Update Trade
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Position Size Calculator Modal -->
+    <div id="calcOverlay" class="journal-overlay"></div>
+    <div id="calcModal" class="journal-modal">
+        <div class="card journal-card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-calculator"></i> Position Size Calculator</div>
+                <button class="fab-btn modal-close" id="closeCalcModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="journal-form">
+                <div class="form-group">
+                    <label>Asset Type</label>
+                    <select id="assetType" class="journal-input">
+                        <option value="forex">Forex</option>
+                        <option value="crypto">Crypto</option>
+                        <option value="commodities">Commodities</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Pair</label>
+                    <div class="searchable-select">
+                        <input type="text" id="calcPairSearch" class="journal-input" placeholder="e.g. EURUSD">
+                        <div id="calcPairDropdown" class="select-dropdown"></div>
+                        <input type="hidden" id="calcPair" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Account Size ($)</label>
+                    <input type="number" id="accountSize" class="journal-input" placeholder="10000" min="1" step="100">
+                </div>
+
+                <div class="form-group">
+                    <label>Risk (%)</label>
+                    <input type="number" id="riskPercent" class="journal-input" placeholder="1" min="0.1" max="100" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>Stop Loss (pips)</label>
+                    <input type="number" id="stopLossPips" class="journal-input" placeholder="50" min="1" step="1">
+                </div>
+
+               <div class="calc-action-group">
+    <button id="calculateBtn" class="calc-btn calc-btn-primary">
+        <i class="fas fa-calculator"></i>
+        <span>Calculate</span>
+    </button>
+    <button id="resetCalcBtn" class="calc-btn calc-btn-secondary">
+        <i class="fas fa-undo"></i>
+        <span>Reset</span>
+    </button>
+</div>
+
+                <div id="calcResult" class="calc-result" style="display:none; margin-top:20px; padding:16px; border-radius:12px;">
+                    <h3 style="margin:0 0 12px; color:var(--accent);">✅ Recommended</h3>
+                    <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+                        <div>
+                            <div class="total-value" id="lotSizeResult" style="font-size:1.6rem;">0.00</div>
+                            <div class="total-label">Lots</div>
+                        </div>
+                        <div>
+                            <div class="total-value" id="riskUSDResult" style="font-size:1.6rem; color:var(--success);">$0.00</div>
+                            <div class="total-label">Risk (USD)</div>
+                        </div>
+                    </div>
+                    <div class="total-label" style="margin-top:12px; font-size:0.9rem; opacity:0.9;">
+                        Pip Value: $<span id="pipValueResult">0.00</span> | SL: <span id="slPipsResult">0</span> pips
+                    </div>
                 </div>
             </div>
         </div>
@@ -392,6 +464,7 @@
             </div>
         </div>
     </div>
+
     <script src="Set.js"></script>
 </body>
 </html>
