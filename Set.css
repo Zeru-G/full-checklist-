@@ -1244,3 +1244,134 @@ body:has(.journal-overlay.active) {
     padding: 8px 16px 4px;
     border-top: 1px solid var(--border);
 }
+/* ===== Calculator Result ===== */
+.calc-result {
+    background: rgba(0, 245, 212, 0.1);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+}
+
+.light-theme .calc-result {
+    background: rgba(0, 123, 255, 0.08);
+    border-color: var(--accent);
+}/* ===== Modern Calculator Buttons ===== */
+.calc-action-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.calc-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.calc-btn i {
+    font-size: 1.3rem;
+}
+
+.calc-btn-primary {
+    background: linear-gradient(135deg, var(--accent), #00a89a);
+    color: #0f0f1b;
+}
+
+.calc-btn-primary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 
+        0 8px 24px rgba(0, 245, 212, 0.45),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, #00e5c5, #00998a);
+}
+
+.calc-btn-primary:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+.calc-btn-secondary {
+    background: linear-gradient(135deg, var(--danger), #cc0000);
+    color: white;
+}
+
+.calc-btn-secondary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 
+        0 8px 24px rgba(255, 85, 85, 0.4),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #ff5555, #b30000);
+}
+
+.calc-btn-secondary:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+/* Light mode enhancement */
+.light-theme .calc-btn-primary {
+    color: white;
+}
+
+.light-theme .calc-btn-secondary {
+    color: white;
+}
+.select-option.selected,
+.select-option:hover {
+    background: rgba(0, 245, 212, 0.2);
+    color: var(--accent);
+}
+
+.light-theme .select-option.selected,
+.light-theme .select-option:hover {
+    background: rgba(0, 123, 255, 0.15);
+}
+/* Ensure dropdown is focus-visible */
+#tradePairDropdown:focus,
+#editPairDropdown:focus,
+#calcPairDropdown:focus {
+    outline: none;
+}
+
+.select-option.selected {
+    background: rgba(0, 245, 212, 0.25) !important;
+    color: var(--accent) !important;
+}
+
+.light-theme .select-option.selected {
+    background: rgba(0, 123, 255, 0.2) !important;
+}
+.select-option {
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-primary);
+}
+
+.select-option:hover,
+.select-option.selected {
+    background: rgba(0, 245, 212, 0.15);
+    color: var(--accent);
+}
+
+.select-option.category {
+    font-weight: 700;
+    color: var(--text-secondary);
+    padding: 8px 16px 4px;
+    border-top: 1px solid var(--border);
+}
+
+.light-theme .select-option:hover,
+.light-theme .select-option.selected {
+    background: rgba(0, 123, 255, 0.1);
+}
+
