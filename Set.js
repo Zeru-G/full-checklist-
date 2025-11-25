@@ -1,9 +1,23 @@
+// ✅ GLOBAL: Clear image uploads
+function clearImageUploads() {
+    const ids = ['beforePreview', 'afterPreview', 'editBeforePreview', 'editAfterPreview'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = '';
+    });
+    ['imgBefore', 'imgAfter', 'editImgBefore', 'editImgAfter'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // ===== Core UI Elements =====
     const themeToggle = document.getElementById('themeToggle');
     const resetBtn = document.getElementById('resetBtn');
     const logTradeBtn = document.getElementById('logTradeBtn');
     const viewJournalBtn = document.getElementById('viewJournalBtn');
+    const calcBtn = document.getElementById('calcBtn');
     const body = document.body;
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
@@ -126,94 +140,139 @@ document.addEventListener('DOMContentLoaded', () => {
         { group: ' Indices', list: ['SPX500', 'NAS100', 'DJI30', 'GER40', 'UK100', 'JP225'] }
     ];
 
-    // ===== Searchable Select =====
-    function initSearchableSelect(searchId, dropdownId, hiddenId) {
-        const searchInput = document.getElementById(searchId);
-        const dropdown = document.getElementById(dropdownId);
-        const hiddenInput = document.getElementById(hiddenId);
+    // ✅ FIXED: Keyboard + Mouse Navigation — Works in All Modals
+   // ✅ FIXED: Dropdown stays open on click, keyboard works, no flicker
+function initSearchableSelect(searchId, dropdownId, hiddenId) {
+    const searchInput = document.getElementById(searchId);
+    const dropdown = document.getElementById(dropdownId);
+    const hiddenInput = document.getElementById(hiddenId);
 
-        if (!searchInput || !dropdown || !hiddenInput) return;
+    if (!searchInput || !dropdown || !hiddenInput) return;
 
-        function renderDropdown(filter = '') {
-            let html = '';
-            SYMBOLS.forEach(group => {
-                const filtered = group.list.filter(sym => 
-                    sym.toLowerCase().includes(filter.toLowerCase())
-                );
-                if (filtered.length > 0) {
-                    html += `<div class="select-option category">${group.group}</div>`;
-                    filtered.forEach(sym => {
-                        html += `<div class="select-option" data-value="${sym}">${sym}</div>`;
-                    });
-                }
-            });
-            dropdown.innerHTML = html || '<div class="select-option">No matches</div>';
+    // Prevent dropdown close on mousedown (critical fix)
+    dropdown.addEventListener('mousedown', e => {
+        e.preventDefault(); // Stops input blur on click
+    });
+
+    function renderDropdown(filter = '') {
+        let html = '';
+        SYMBOLS.forEach(group => {
+            const filtered = group.list.filter(sym => 
+                sym.toLowerCase().includes(filter.toLowerCase())
+            );
+            if (filtered.length > 0) {
+                html += `<div class="select-option category">${group.group}</div>`;
+                filtered.forEach(sym => {
+                    html += `<div class="select-option" data-value="${sym}">${sym}</div>`;
+                });
+            }
+        });
+        dropdown.innerHTML = html || '<div class="select-option disabled">No matches</div>';
+    }
+
+    function openDropdown() {
+        renderDropdown(searchInput.value);
+        dropdown.classList.add('active');
+        searchInput.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeDropdown() {
+        dropdown.classList.remove('active');
+        searchInput.setAttribute('aria-expanded', 'false');
+    }
+
+    function selectOption(option) {
+        if (option.classList.contains('disabled')) return;
+        const value = option.dataset.value;
+        searchInput.value = value;
+        hiddenInput.value = value;
+        closeDropdown();
+        searchInput.focus();
+
+        // Trigger pair-type detection (for calculator)
+        searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    // ===== Events =====
+    searchInput.addEventListener('focus', openDropdown);
+
+    // ✅ CRITICAL: Delayed blur close — only close if not clicking dropdown
+    let isClosing = false;
+    searchInput.addEventListener('blur', () => {
+        isClosing = true;
+        setTimeout(() => {
+            if (isClosing) closeDropdown();
+            isClosing = false;
+        }, 200);
+    });
+
+    dropdown.addEventListener('mousedown', () => {
+        isClosing = false; // Cancel pending close
+    });
+
+    searchInput.addEventListener('input', () => {
+        searchInput.value = searchInput.value.toUpperCase();
+        openDropdown();
+    });
+
+    searchInput.addEventListener('paste', e => {
+        setTimeout(() => {
+            searchInput.value = searchInput.value.toUpperCase();
+            openDropdown();
+        }, 10);
+    });
+
+    // Keyboard navigation (↑ ↓ ⏎)
+    function handleKeydown(e) {
+        const items = Array.from(dropdown.querySelectorAll('.select-option:not(.category):not(.disabled)'));
+        const current = dropdown.querySelector('.select-option.selected');
+        let index = items.indexOf(current);
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            index = index === -1 ? 0 : Math.min(index + 1, items.length - 1);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            index = index === -1 ? items.length - 1 : Math.max(index - 1, 0);
+                        } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (current) {
+                        selectOption(current);
+                        closeDropdown(); // ✅ Ensure dropdown closes
+                    }
+                    return;
+                } else if (e.key === 'Escape') {
+            e.preventDefault();
+            closeDropdown();
+            searchInput.focus();
+            return;
         }
 
-        searchInput.addEventListener('focus', () => {
-            renderDropdown(searchInput.value);
-            dropdown.classList.add('active');
-        });
-
-        searchInput.addEventListener('blur', () => {
-            setTimeout(() => dropdown.classList.remove('active'), 150);
-        });
-
-        searchInput.addEventListener('input', () => {
-            searchInput.value = searchInput.value.toUpperCase();
-            renderDropdown(searchInput.value);
-            dropdown.classList.add('active');
-        });
-
-        searchInput.addEventListener('paste', e => {
-            setTimeout(() => {
-                searchInput.value = searchInput.value.toUpperCase();
-                renderDropdown(searchInput.value);
-            }, 10);
-        });
-
-        dropdown.addEventListener('click', e => {
-            const option = e.target.closest('.select-option:not(.category)');
-            if (option) {
-                const value = option.dataset.value;
-                searchInput.value = value;
-                hiddenInput.value = value;
-                dropdown.classList.remove('active');
-                searchInput.focus();
-            }
-        });
-
-        searchInput.addEventListener('keydown', e => {
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                const first = dropdown.querySelector('.select-option:not(.category)');
-                if (first) first.focus();
-            }
-        });
-
-        dropdown.addEventListener('keydown', e => {
-            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-                e.preventDefault();
-                const items = Array.from(dropdown.querySelectorAll('.select-option:not(.category)'));
-                const current = document.activeElement;
-                let index = items.indexOf(current);
-                index += e.key === 'ArrowDown' ? 1 : -1;
-                if (index < 0) index = items.length - 1;
-                if (index >= items.length) index = 0;
-                items[index]?.focus();
-            } else if (e.key === 'Enter') {
-                e.preventDefault();
-                const active = document.activeElement;
-                if (active.classList.contains('select-option')) {
-                    const value = active.dataset.value;
-                    searchInput.value = value;
-                    hiddenInput.value = value;
-                    dropdown.classList.remove('active');
-                    searchInput.focus();
-                }
-            }
-        });
+        // Update selection
+        items.forEach(item => item.classList.remove('selected'));
+        if (items[index]) {
+            items[index].classList.add('selected');
+            items[index].scrollIntoView({ block: 'nearest' });
+        }
     }
+
+    searchInput.addEventListener('keydown', handleKeydown);
+    dropdown.addEventListener('keydown', handleKeydown);
+
+    // Mouse
+    dropdown.addEventListener('click', e => {
+        const option = e.target.closest('.select-option:not(.category):not(.disabled)');
+        if (option) selectOption(option);
+    });
+
+    dropdown.addEventListener('mouseover', e => {
+        const option = e.target.closest('.select-option:not(.category):not(.disabled)');
+        if (option) {
+            dropdown.querySelectorAll('.select-option.selected').forEach(el => el.classList.remove('selected'));
+            option.classList.add('selected');
+        }
+    });
+}
 
     // ===== Modals =====
     const journalModal = document.getElementById('journalModal');
@@ -226,12 +285,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeEditModal = document.getElementById('closeEditModal');
     const updateTradeBtn = document.getElementById('updateTradeBtn');
 
+    const calcModal = document.getElementById('calcModal');
+    const calcOverlay = document.getElementById('calcOverlay');
+    const closeCalcModal = document.getElementById('closeCalcModal');
+
     const backToChecklist = document.getElementById('backToChecklist');
     const journalPage = document.getElementById('journalPage');
 
     // Initialize searchable selects
     initSearchableSelect('tradePairSearch', 'tradePairDropdown', 'tradePair');
     initSearchableSelect('editPairSearch', 'editPairDropdown', 'editPair');
+    initSearchableSelect('calcPairSearch', 'calcPairDropdown', 'calcPair');
 
     // Set today
     const dateInput = document.getElementById('tradeDate');
@@ -340,7 +404,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const trade = journal.find(t => t.id === id);
         if (!trade) return alert('Trade not found.');
 
-        // Fill form
         document.getElementById('editTradeId').value = trade.id;
         document.getElementById('editDate').value = trade.date;
         document.getElementById('editPair').value = trade.pair;
@@ -350,7 +413,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('editGrade').value = trade.grade || '';
         document.getElementById('editNotes').value = trade.notes || '';
 
-        // Preview images with X button
         const createPreview = (previewId, imgSrc, containerId) => {
             const preview = document.getElementById(previewId);
             const container = document.getElementById(containerId);
@@ -378,12 +440,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('editPairSearch')?.focus();
     }
 
-    // Bind buttons
     document.getElementById('gradeLogBtn')?.addEventListener('click', openLogModal);
     logTradeBtn?.addEventListener('click', openLogModal);
-    window.editTrade = openEditModal; // ✅ Now globally available
+    window.editTrade = openEditModal;
 
-    // Close handlers
     [journalOverlay, closeJournalModal].forEach(el => {
         el?.addEventListener('click', () => {
             journalOverlay.classList.remove('active');
@@ -398,6 +458,56 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleBodyScroll(false);
         });
     });
+    [calcOverlay, closeCalcModal].forEach(el => {
+        el?.addEventListener('click', () => {
+            calcOverlay.classList.remove('active');
+            calcModal.classList.remove('active');
+            toggleBodyScroll(false);
+            document.getElementById('calcResult').style.display = 'none';
+        });
+    });
+
+    calcBtn?.addEventListener('click', () => {
+        calcOverlay.classList.add('active');
+        calcModal.classList.add('active');
+        toggleBodyScroll(true);
+        document.getElementById('calcPairSearch')?.focus();
+    });
+
+    // ===== HYBRID Pip Value =====
+    const CUSTOM_PIP_VALUES = { 'EURGBP': 13.00 };
+
+    async function getPipValueLive(pair, asset) {
+        if (asset !== 'forex') {
+            if (asset === 'crypto') return pair.startsWith('BTC') ? 100.0 : pair.startsWith('ETH') ? 10.0 : 1.0;
+            if (asset === 'commodities') return pair === 'XAUUSD' ? 100.0 : 10.0;
+            return 10.0;
+        }
+
+        const p = pair.replace(/[/\s]/g, '').toUpperCase();
+        if (CUSTOM_PIP_VALUES[p]) return CUSTOM_PIP_VALUES[p];
+
+        const base = p.substring(0, 3);
+        const quote = p.substring(3, 6);
+        const pipSize = quote === 'JPY' ? 0.01 : 0.0001;
+        const lotSize = 100000;
+
+        try {
+            if (quote === 'USD') return 10.0;
+            if (base === 'USD') {
+                const res = await fetch(`https://api.exchangerate.host/latest?base=${base}&symbols=${quote}`);
+                const data = await res.json();
+                const rate = data.rates[quote];
+                return rate ? (pipSize * lotSize) / rate : 10.0;
+            }
+            const res = await fetch(`https://api.exchangerate.host/latest?base=${quote}&symbols=USD`);
+            const data = await res.json();
+            const quoteInUSD = data.rates.USD;
+            return quoteInUSD ? (pipSize * lotSize) / quoteInUSD : 10.0;
+        } catch (e) {
+            return 10.0;
+        }
+    }
 
     // ===== Save & Update =====
     saveTradeBtn?.addEventListener('click', async () => {
@@ -480,25 +590,67 @@ document.addEventListener('DOMContentLoaded', () => {
         editModal.classList.remove('active');
         toggleBodyScroll(false);
 
-        if (journalPage && journalPage.style.display === 'block') {
-            const tbody = document.getElementById('journalTableBody');
-            if (tbody) showJournalPage();
+        if (journalPage && journalPage.style.display === 'block') showJournalPage();
+    });
+
+    // ===== Position Size Calculator =====
+    const assetTypeSelect = document.getElementById('assetType');
+    const calcPairSearch = document.getElementById('calcPairSearch');
+
+    calcPairSearch?.addEventListener('input', () => {
+        const p = calcPairSearch.value.trim().toUpperCase();
+        if (p) {
+            if (['BTC','ETH','SOL','XRP','DOGE'].some(c => p.startsWith(c))) {
+                assetTypeSelect.value = 'crypto';
+            } else if (['XAU','XAG','USOIL','UKOIL'].some(c => p.startsWith(c))) {
+                assetTypeSelect.value = 'commodities';
+            } else {
+                assetTypeSelect.value = 'forex';
+            }
         }
     });
 
-    // ===== Navigation =====
-    viewJournalBtn?.addEventListener('click', () => {
-        showJournalPage();
-        toggleBodyScroll(false);
+    document.getElementById('calculateBtn')?.addEventListener('click', async () => {
+        const asset = assetTypeSelect.value;
+        const pair = document.getElementById('calcPair')?.value.trim().toUpperCase() || calcPairSearch?.value.trim().toUpperCase() || '';
+        const accountSize = parseFloat(document.getElementById('accountSize').value);
+        const riskPercent = parseFloat(document.getElementById('riskPercent').value);
+        const slPips = parseFloat(document.getElementById('stopLossPips').value);
+
+        if (!accountSize || !riskPercent || !slPips || !pair) {
+            alert('⚠️ Please fill all fields.');
+            return;
+        }
+
+        const riskAmount = accountSize * (riskPercent / 100);
+        const pipValue = await getPipValueLive(pair, asset);
+        const lots = riskAmount / (slPips * pipValue);
+        const finalLots = Math.max(0.01, parseFloat(lots.toFixed(2)));
+
+        document.getElementById('lotSizeResult').textContent = finalLots;
+        document.getElementById('riskUSDResult').textContent = '$' + riskAmount.toFixed(2);
+        document.getElementById('pipValueResult').textContent = pipValue.toFixed(2);
+        document.getElementById('slPipsResult').textContent = slPips;
+        document.getElementById('calcResult').style.display = 'block';
     });
 
+    document.getElementById('resetCalcBtn')?.addEventListener('click', () => {
+        ['accountSize', 'riskPercent', 'stopLossPips'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
+        calcPairSearch.value = '';
+        document.getElementById('calcPair').value = '';
+        document.getElementById('calcResult').style.display = 'none';
+    });
+
+    // ===== Navigation & Helpers =====
+    viewJournalBtn?.addEventListener('click', () => { showJournalPage(); toggleBodyScroll(false); });
     backToChecklist?.addEventListener('click', () => {
         journalPage.style.display = 'none';
         document.querySelector('.container').style.display = 'block';
         toggleBodyScroll(false);
     });
 
-    // ===== Helper Functions =====
     function calculateTotals() {
         let weekly = 0, daily = 0, fourHour = 0, oneHour = 0, entry = 0;
         document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
@@ -598,7 +750,54 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 });
 
-// ✅ GLOBAL: Delete trade
+// ✅ GLOBAL: Edit & Delete
+window.editTrade = (id) => {
+    const journal = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
+    const trade = journal.find(t => t.id === id);
+    if (!trade) return alert('Trade not found.');
+
+    document.getElementById('editTradeId').value = trade.id;
+    document.getElementById('editDate').value = trade.date;
+    document.getElementById('editPair').value = trade.pair;
+    document.getElementById('editPairSearch').value = trade.pair;
+    document.getElementById('editDir').value = trade.dir;
+    document.getElementById('editOutcome').value = trade.outcome;
+    document.getElementById('editGrade').value = trade.grade || '';
+    document.getElementById('editNotes').value = trade.notes || '';
+
+    const createPreview = (previewId, imgSrc, containerId) => {
+        const preview = document.getElementById(previewId);
+        const container = document.getElementById(containerId);
+        if (!preview || !imgSrc || !container) return;
+
+        preview.innerHTML = `
+            <img src="${imgSrc}" alt="Preview" style="max-width:100%;max-height:200px;border-radius:8px;margin-top:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+            <button class="remove-image-btn" title="Remove">&times;</button>
+        `;
+        preview.querySelector('.remove-image-btn').onclick = () => {
+            preview.innerHTML = '';
+            container.querySelector('.image-dropzone').style.display = 'block';
+            const inputId = containerId.includes('Before') ? 'editImgBefore' : 'editImgAfter';
+            document.getElementById(inputId).value = '';
+        };
+        container.querySelector('.image-dropzone').style.display = 'none';
+    };
+
+    createPreview('editBeforePreview', trade.imgBefore, 'editBeforeUploadContainer');
+    createPreview('editAfterPreview', trade.imgAfter, 'editAfterUploadContainer');
+
+    document.getElementById('editOverlay')?.classList.add('active');
+    document.getElementById('editModal')?.classList.add('active');
+
+    const scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+
+    document.getElementById('editPairSearch')?.focus();
+};
+
 window.deleteTrade = (id) => {
     if (!confirm('⚠️ Delete this trade? This cannot be undone.')) return;
     let journal = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
@@ -613,7 +812,6 @@ window.deleteTrade = (id) => {
         setTimeout(() => row.remove(), 300);
     }
 
-    // Update stats
     const j = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
     const wins = j.filter(t => t.outcome === 'Win').length;
     const losses = j.filter(t => t.outcome === 'Loss').length;
